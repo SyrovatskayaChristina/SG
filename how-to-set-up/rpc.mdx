@@ -1,15 +1,24 @@
 ---
 title: "RPC"
 description: "Send Solana transactions through Solana Gun using your preferred Solana SDK."
+mode: "wide"
 ---
+
+import { EndpointsTable } from "/snippets/endpoints.jsx";
 
 Send Solana transactions through Solana Gun using your preferred Solana SDK.
 
 ## Before you begin
 
-- Use your Solana Gun endpoint ([get it here](/introduction#endpoints)). Replace the placeholders with your connection details.
+- Use your Solana Gun endpoint ([see below](#endpoints)). Replace the placeholders with your connection details.
 - Have a funded Solana wallet and its local keypair JSON file. The examples send 0.0021 SOL (2,100,000 lamports) to an existing wallet, plus the network fee.
 - Use a regular Solana RPC to fetch a recent blockhash. The examples use `https://solana-rpc.publicnode.com`.
+
+## Endpoints
+
+Choose a host close to your application. Click an endpoint to copy it.
+
+<EndpointsTable protocol="RPC" />
 
 ## Send a transaction
 

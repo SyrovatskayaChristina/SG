@@ -1,4 +1,4 @@
-export const EndpointsTable = () => {
+export const EndpointsTable = ({ protocol } = {}) => {
   const [copied, setCopied] = useState(null);
 
   const regions = [
@@ -7,11 +7,13 @@ export const EndpointsTable = () => {
     { name: "Ashburn, USA", code: "ASH1", host: "ash1.solanagun.com" },
     { name: "Tokyo, Japan", code: "TYO1", host: "tyo1.solanagun.com" },
   ];
-  const protocols = [
+  const allProtocols = [
     { name: "RPC", url: (host) => `https://${host}:8875` },
     { name: "WebSocket", url: (host) => `wss://${host}:8875` },
     { name: "QUIC", url: (host) => `${host}:7000` },
   ];
+  const protocols = protocol ? allProtocols.filter((p) => p.name === protocol) : allProtocols;
+  const showProtocol = protocols.length > 1;
 
   const copy = (value) => {
     navigator.clipboard.writeText(value).then(() => {
@@ -28,14 +30,14 @@ export const EndpointsTable = () => {
         <thead>
           <tr className="text-zinc-950/70 dark:text-white/70">
             <th className={`${cell} font-semibold`}>Location</th>
-            <th className={`${cell} font-semibold`}>Protocol</th>
+            {showProtocol && <th className={`${cell} font-semibold`}>Protocol</th>}
             <th className={`${cell} font-semibold`}>Endpoint</th>
           </tr>
         </thead>
         <tbody className="text-zinc-950/90 dark:text-white/90">
           {regions.map((region) =>
-            protocols.map((protocol, i) => {
-              const value = protocol.url(region.host);
+            protocols.map((proto, i) => {
+              const value = proto.url(region.host);
               const isCopied = copied === value;
               return (
                 <tr key={value}>
@@ -45,7 +47,7 @@ export const EndpointsTable = () => {
                       <div className="text-xs text-zinc-950/50 dark:text-white/50">{region.code}</div>
                     </td>
                   )}
-                  <td className={cell} style={{ whiteSpace: "nowrap" }}>{protocol.name}</td>
+                  {showProtocol && <td className={cell} style={{ whiteSpace: "nowrap" }}>{proto.name}</td>}
                   <td className={cell}>
                     <span style={{ position: "relative", display: "inline-block" }}>
                       <button
