@@ -1,7 +1,10 @@
 ---
 title: "Introduction"
 description: "Solana Gun is a fast transaction landing service for Solana."
+mode: "wide"
 ---
+
+import { EndpointsTable } from "/snippets/endpoints.jsx";
 
 Solana Gun is a fast transaction landing service for Solana. It shortens the delivery path between your application and Solana's block producers. Send a signed transaction to a nearby Solana Gun endpoint over RPC, WebSocket, or QUIC, and the service uses its view of the leader schedule to forward it over SwQoS connections to the validators responsible for the current and upcoming blocks.
 
@@ -50,14 +53,9 @@ Get your personal token through the inner chat on the [Allnodes website](https:/
 
 ## Endpoints
 
-Choose a host close to your application:
+Choose a host close to your application. Click an endpoint to copy it.
 
-| Location | RPC | WebSocket | QUIC |
-| --- | --- | --- | --- |
-| Frankfurt, Germany (FRA1) | `https://fra1.solanagun.com:8875` | `wss://fra1.solanagun.com:8875` | `fra1.solanagun.com:7000` |
-| Frankfurt, Germany (FRA2) | `https://fra2.solanagun.com:8875` | `wss://fra2.solanagun.com:8875` | `fra2.solanagun.com:7000` |
-| Ashburn, USA (ASH1) | `https://ash1.solanagun.com:8875` | `wss://ash1.solanagun.com:8875` | `ash1.solanagun.com:7000` |
-| Tokyo, Japan (TYO1) | `https://tyo1.solanagun.com:8875` | `wss://tyo1.solanagun.com:8875` | `tyo1.solanagun.com:7000` |
+<EndpointsTable />
 
 ## Tip addresses
 
