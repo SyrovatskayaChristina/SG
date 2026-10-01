@@ -27,6 +27,7 @@
           "introduction",
           {
             "group": "How to set up",
+            "expanded": true,
             "pages": [
               "how-to-set-up/rpc",
               "how-to-set-up/websocket",
