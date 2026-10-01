@@ -1,0 +1,116 @@
+---
+title: "QUIC (Recommended)"
+sidebarTitle: "QUIC"
+description: "Send Solana transactions with the Solana Gun Rust client, which handles connection setup and authentication."
+---
+
+Send Solana transactions with the [Solana Gun Rust client](https://github.com/allnodes/solana-gun-quic-client), which handles connection setup and authentication.
+
+## Before you begin
+
+- Use your Solana Gun endpoint ([get it here](/introduction#endpoints)). Replace the placeholders with your connection details.
+- Have a funded Solana wallet and its local keypair JSON file. The example sends 0.0021 SOL (2,100,000 lamports) to an existing wallet, plus the network fee.
+- Use a regular Solana RPC to fetch a recent blockhash. The example uses `https://solana-rpc.publicnode.com`.
+
+<Warning>
+Your network must allow outbound UDP to the QUIC port.
+</Warning>
+
+## Send a transaction
+
+<Steps>
+  <Step title="Create a Rust project">
+    ```bash
+    cargo new solana-gun-quic-example
+    cd solana-gun-quic-example
+    ```
+  </Step>
+  <Step title="Add dependencies">
+    Replace the `[dependencies]` section in `Cargo.toml` with:
+
+    ```toml Cargo.toml
+    [dependencies]
+    anyhow = "1"
+    solana-client = "=2.3.13"
+    solana-sdk = "=2.3.1"
+    tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+    bincode = "1"
+    solana-gun-quic-client = { git = "https://github.com/allnodes/solana-gun-quic-client", tag = "v1.0.0" }
+    ```
+  </Step>
+  <Step title="Write the code">
+    Save the code as `src/main.rs` and replace the hostname, port, token, keypair path, and recipient address:
+
+    ```rust src/main.rs
+    use solana_client::nonblocking::rpc_client::RpcClient;
+    use solana_gun_quic_client::{ClientConfig, SolanaGunQuicClient};
+    use solana_sdk::{
+        commitment_config::CommitmentConfig,
+        pubkey::Pubkey,
+        signature::{read_keypair_file, Signer},
+        system_instruction,
+        transaction::{Transaction, VersionedTransaction},
+    };
+    use std::time::Duration;
+
+    const KEYPAIR_PATH: &str = "/path/to/keypair.json";
+    const RPC_URL: &str = "https://solana-rpc.publicnode.com";
+    const GUN_HOST_PORT: &str = "fra1.solanagun.com:7000";
+    const GUN_TOKEN: &str = "<TOKEN>";
+    const RECIPIENT_ADDRESS: &str = "<RECIPIENT_ADDRESS>";
+    const AMOUNT_LAMPORTS: u64 = 1_000_000;
+
+    #[tokio::main]
+    async fn main() -> anyhow::Result<()> {
+        let payer = read_keypair_file(KEYPAIR_PATH)
+            .map_err(|error| anyhow::anyhow!(error.to_string()))?;
+        let recipient: Pubkey = RECIPIENT_ADDRESS.parse()?;
+
+        let rpc = RpcClient::new_with_timeout(
+            RPC_URL.to_string(),
+            Duration::from_secs(30),
+        );
+        let (blockhash, _) = rpc
+            .get_latest_blockhash_with_commitment(CommitmentConfig::confirmed())
+            .await?;
+
+        let instruction =
+            system_instruction::transfer(&payer.pubkey(), &recipient, AMOUNT_LAMPORTS);
+        let transaction = VersionedTransaction::from(Transaction::new_signed_with_payer(
+            &[instruction],
+            Some(&payer.pubkey()),
+            &[&payer],
+            blockhash,
+        ));
+
+        let gun = SolanaGunQuicClient::connect(
+            GUN_HOST_PORT,
+            GUN_TOKEN,
+            ClientConfig::default(),
+        )
+        .await?;
+
+        gun.send_transaction_bytes(&bincode::serialize(&transaction)?)
+            .await?;
+
+        println!("Sent. Transaction signature: {}", transaction.signatures[0]);
+
+        gun.close().await;
+        Ok(())
+    }
+    ```
+  </Step>
+  <Step title="Run">
+    ```bash
+    cargo run --release
+    ```
+  </Step>
+</Steps>
+
+## Submission response
+
+The example prints the signature from your signed transaction. A successful send means the client wrote the transaction bytes.
+
+<Note>
+It does not guarantee server acceptance or confirmation on Solana.
+</Note>

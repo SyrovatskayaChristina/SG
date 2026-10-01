@@ -1,0 +1,105 @@
+---
+title: "WebSocket"
+description: "Send Solana transactions over a persistent WebSocket connection to Solana Gun."
+---
+
+Send Solana transactions over a persistent WebSocket connection to Solana Gun.
+
+## Before you begin
+
+- Use your Solana Gun endpoint ([get it here](/introduction#endpoints)). Replace the placeholders with your connection details.
+- Have a funded Solana wallet and its local keypair JSON file. The example sends 0.0021 SOL (2,100,000 lamports) to an existing wallet, plus the network fee.
+- Use a regular Solana RPC to fetch a recent blockhash. The example uses `https://solana-rpc.publicnode.com`.
+
+## Send a transaction
+
+Choose your language below. Each example signs locally and submits directly over WebSocket.
+
+<Info>
+`skipPreflight` must be enabled because Solana Gun does not simulate individual transactions. The examples set it for you.
+</Info>
+
+<Tabs>
+  <Tab title="Python">
+    <Steps>
+      <Step title="Install dependencies">
+        Install the Python SDK and the [WebSocket library](https://websockets.readthedocs.io/en/15.0.1/reference/asyncio/client.html):
+
+        ```bash
+        python3 -m pip install solana==0.36.9 websockets==15.0.1
+        ```
+      </Step>
+      <Step title="Write the code">
+        Save the code as `send_ws.py` and replace the endpoint, keypair path, and recipient address:
+
+        ```python send_ws.py
+        import asyncio
+        import base64
+        import json
+        from pathlib import Path
+
+        from solana.rpc.async_api import AsyncClient
+        from solders.keypair import Keypair
+        from solders.message import MessageV0
+        from solders.pubkey import Pubkey
+        from solders.system_program import TransferParams, transfer
+        from solders.transaction import VersionedTransaction
+        from websockets.asyncio.client import connect
+
+        KEYPAIR_PATH = "/path/to/keypair.json"
+        RPC_URL = "https://solana-rpc.publicnode.com"
+        GUN_URL = "wss://fra1.solanagun.com:8875/<TOKEN>"
+        RECIPIENT_ADDRESS = "<RECIPIENT_ADDRESS>"
+        AMOUNT_LAMPORTS = 1_000_000
+
+        async def main():
+            payer = Keypair.from_json(Path(KEYPAIR_PATH).read_text())
+            recipient = Pubkey.from_string(RECIPIENT_ADDRESS)
+
+            async with AsyncClient(RPC_URL, timeout=30) as rpc:
+                blockhash = (await rpc.get_latest_blockhash(commitment="confirmed")).value.blockhash
+
+            instruction = transfer(TransferParams(
+                from_pubkey=payer.pubkey(),
+                to_pubkey=recipient,
+                lamports=AMOUNT_LAMPORTS,
+            ))
+            message = MessageV0.try_compile(payer.pubkey(), [instruction], [], blockhash)
+            transaction = VersionedTransaction(message, [payer])
+
+            async with connect(GUN_URL, open_timeout=30) as gun:
+                await gun.send(json.dumps({
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "sendTransaction",
+                    "params": [
+                        base64.b64encode(bytes(transaction)).decode(),
+                        {"encoding": "base64", "skipPreflight": True},
+                    ],
+                }))
+
+                response = json.loads(await asyncio.wait_for(gun.recv(), timeout=30))
+                if "error" in response:
+                    raise RuntimeError(response["error"])
+
+                print("Submitted. Transaction signature:", response["result"])
+
+        asyncio.run(main())
+        ```
+      </Step>
+      <Step title="Run">
+        ```bash
+        python3 send_ws.py
+        ```
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Submission response
+
+A successful call returns the transaction signature and means Solana Gun accepted it for forwarding.
+
+<Note>
+It does not guarantee confirmation on Solana.
+</Note>

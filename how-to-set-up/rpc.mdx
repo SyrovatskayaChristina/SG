@@ -1,0 +1,341 @@
+---
+title: "RPC"
+description: "Send Solana transactions through Solana Gun using your preferred Solana SDK."
+---
+
+Send Solana transactions through Solana Gun using your preferred Solana SDK.
+
+## Before you begin
+
+- Use your Solana Gun endpoint ([get it here](/introduction#endpoints)). Replace the placeholders with your connection details.
+- Have a funded Solana wallet and its local keypair JSON file. The examples send 0.0021 SOL (2,100,000 lamports) to an existing wallet, plus the network fee.
+- Use a regular Solana RPC to fetch a recent blockhash. The examples use `https://solana-rpc.publicnode.com`.
+
+## Send a transaction
+
+Choose your language below. Each example signs locally and submits directly through the SDK.
+
+<Info>
+`skipPreflight` must be enabled because Solana Gun does not simulate individual transactions. The examples set it for you.
+</Info>
+
+<Tabs>
+  <Tab title="JavaScript (Node.js)">
+    <Steps>
+      <Step title="Install the SDK">
+        Use Node.js 22.12 or later with [@solana/web3.js](https://solana-foundation.github.io/solana-web3.js/):
+
+        ```bash
+        npm install @solana/web3.js@1
+        ```
+      </Step>
+      <Step title="Write the code">
+        Save the code as `send.mjs` and replace the endpoint, keypair path, and recipient address:
+
+        ```javascript send.mjs
+        import {
+          Connection, Keypair, PublicKey, SystemProgram,
+          TransactionMessage, VersionedTransaction,
+        } from "@solana/web3.js";
+        import { readFileSync } from "node:fs";
+
+        const KEYPAIR_PATH = "/path/to/keypair.json";
+        const RPC_URL = "https://solana-rpc.publicnode.com";
+        const GUN_URL = "https://fra1.solanagun.com:8875/<TOKEN>";
+        const RECIPIENT_ADDRESS = "<RECIPIENT_ADDRESS>";
+        const AMOUNT_LAMPORTS = 1_000_000;
+
+        const payer = Keypair.fromSecretKey(
+          Uint8Array.from(JSON.parse(readFileSync(KEYPAIR_PATH, "utf8"))),
+        );
+        const recipient = new PublicKey(RECIPIENT_ADDRESS);
+
+        const rpc = new Connection(RPC_URL, "confirmed");
+        const { blockhash } = await rpc.getLatestBlockhash();
+
+        const message = new TransactionMessage({
+          payerKey: payer.publicKey,
+          recentBlockhash: blockhash,
+          instructions: [
+            SystemProgram.transfer({
+              fromPubkey: payer.publicKey,
+              toPubkey: recipient,
+              lamports: AMOUNT_LAMPORTS,
+            }),
+          ],
+        }).compileToV0Message();
+
+        const transaction = new VersionedTransaction(message);
+        transaction.sign([payer]);
+
+        const gun = new Connection(GUN_URL, {
+          fetch: (url, options) => fetch(url, {
+            ...options, signal: AbortSignal.timeout(30_000),
+          }),
+        });
+
+        try {
+          const signature = await gun.sendRawTransaction(transaction.serialize(), {
+            skipPreflight: true,
+          });
+          console.log("Submitted. Transaction signature:", signature);
+        } catch (error) {
+          console.error("Submission failed:", error.message);
+          process.exitCode = 1;
+        }
+        ```
+      </Step>
+      <Step title="Run">
+        ```bash
+        node send.mjs
+        ```
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Python">
+    <Steps>
+      <Step title="Install the SDK">
+        Install the SDK version used by this example:
+
+        ```bash
+        python3 -m pip install solana==0.36.9
+        ```
+      </Step>
+      <Step title="Write the code">
+        Save the code as `send.py` and replace the endpoint, keypair path, and recipient address:
+
+        ```python send.py
+        import asyncio
+        from pathlib import Path
+
+        from solana.rpc.async_api import AsyncClient
+        from solana.rpc.types import TxOpts
+        from solders.keypair import Keypair
+        from solders.message import MessageV0
+        from solders.pubkey import Pubkey
+        from solders.system_program import TransferParams, transfer
+        from solders.transaction import VersionedTransaction
+
+        KEYPAIR_PATH = "/path/to/keypair.json"
+        RPC_URL = "https://solana-rpc.publicnode.com"
+        GUN_URL = "https://fra1.solanagun.com:8875/<TOKEN>"
+        RECIPIENT_ADDRESS = "<RECIPIENT_ADDRESS>"
+        AMOUNT_LAMPORTS = 1_000_000
+
+        async def main():
+            payer = Keypair.from_json(Path(KEYPAIR_PATH).read_text())
+            recipient = Pubkey.from_string(RECIPIENT_ADDRESS)
+
+            async with AsyncClient(RPC_URL, timeout=30) as rpc:
+                blockhash = (await rpc.get_latest_blockhash(commitment="confirmed")).value.blockhash
+
+            instruction = transfer(TransferParams(
+                from_pubkey=payer.pubkey(),
+                to_pubkey=recipient,
+                lamports=AMOUNT_LAMPORTS,
+            ))
+            message = MessageV0.try_compile(payer.pubkey(), [instruction], [], blockhash)
+            transaction = VersionedTransaction(message, [payer])
+
+            async with AsyncClient(GUN_URL, timeout=30) as gun:
+                response = await gun.send_raw_transaction(
+                    bytes(transaction), opts=TxOpts(skip_preflight=True),
+                )
+                print("Submitted. Transaction signature:", response.value)
+
+        asyncio.run(main())
+        ```
+      </Step>
+      <Step title="Run">
+        ```bash
+        python3 send.py
+        ```
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Go">
+    <Steps>
+      <Step title="Install the SDK">
+        Create a directory for the example and install [solana-go](https://github.com/gagliardetto/solana-go):
+
+        ```bash
+        mkdir solana-gun-go
+        cd solana-gun-go
+        go mod init solana-gun-example
+        go get github.com/gagliardetto/solana-go@v1.14.0
+        ```
+      </Step>
+      <Step title="Write the code">
+        Save the code as `main.go` and replace the endpoint, keypair path, and recipient address:
+
+        ```go main.go
+        package main
+
+        import (
+        	"context"
+        	"fmt"
+        	"time"
+
+        	"github.com/gagliardetto/solana-go"
+        	"github.com/gagliardetto/solana-go/programs/system"
+        	"github.com/gagliardetto/solana-go/rpc"
+        )
+
+        const (
+        	KEYPAIR_PATH             = "/path/to/keypair.json"
+        	RPC_URL                  = "https://solana-rpc.publicnode.com"
+        	GUN_URL                  = "https://fra1.solanagun.com:8875/<TOKEN>"
+        	RECIPIENT_ADDRESS        = "<RECIPIENT_ADDRESS>"
+        	AMOUNT_LAMPORTS   uint64 = 1_000_000
+        )
+
+        func main() {
+        	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+        	defer cancel()
+
+        	payer, err := solana.PrivateKeyFromSolanaKeygenFile(KEYPAIR_PATH)
+        	if err != nil {
+        		panic(err)
+        	}
+        	recipient := solana.MustPublicKeyFromBase58(RECIPIENT_ADDRESS)
+
+        	source := rpc.New(RPC_URL)
+        	latest, err := source.GetLatestBlockhash(ctx, rpc.CommitmentConfirmed)
+        	if err != nil {
+        		panic(err)
+        	}
+
+        	transaction, err := solana.NewTransaction(
+        		[]solana.Instruction{
+        			system.NewTransferInstruction(AMOUNT_LAMPORTS, payer.PublicKey(), recipient).Build(),
+        		},
+        		latest.Value.Blockhash,
+        		solana.TransactionPayer(payer.PublicKey()),
+        	)
+        	if err != nil {
+        		panic(err)
+        	}
+
+        	_, err = transaction.Sign(func(key solana.PublicKey) *solana.PrivateKey {
+        		if key == payer.PublicKey() {
+        			return &payer
+        		}
+        		return nil
+        	})
+        	if err != nil {
+        		panic(err)
+        	}
+
+        	gun := rpc.New(GUN_URL)
+        	signature, err := gun.SendTransactionWithOpts(ctx, transaction, rpc.TransactionOpts{SkipPreflight: true})
+        	if err != nil {
+        		panic(err)
+        	}
+
+        	fmt.Println("Submitted. Transaction signature:", signature)
+        }
+        ```
+      </Step>
+      <Step title="Run">
+        ```bash
+        go mod tidy
+        go run .
+        ```
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Rust">
+    <Steps>
+      <Step title="Create a Rust project">
+        ```bash
+        cargo new solana-gun-rpc-example
+        cd solana-gun-rpc-example
+        ```
+      </Step>
+      <Step title="Add dependencies">
+        Replace the `[dependencies]` section in `Cargo.toml` with:
+
+        ```toml Cargo.toml
+        [dependencies]
+        anyhow = "1"
+        solana-client = "=2.3.13"
+        solana-sdk = "=2.3.1"
+        tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+        ```
+      </Step>
+      <Step title="Write the code">
+        Save the code as `src/main.rs` and replace the endpoint, keypair path, and recipient address:
+
+        ```rust src/main.rs
+        use solana_client::{
+            nonblocking::rpc_client::RpcClient,
+            rpc_config::RpcSendTransactionConfig,
+        };
+        use solana_sdk::{
+            commitment_config::CommitmentConfig,
+            pubkey::Pubkey,
+            signature::{read_keypair_file, Signer},
+            system_instruction,
+            transaction::{Transaction, VersionedTransaction},
+        };
+        use std::time::Duration;
+
+        const KEYPAIR_PATH: &str = "/path/to/keypair.json";
+        const RPC_URL: &str = "https://solana-rpc.publicnode.com";
+        const GUN_URL: &str = "https://fra1.solanagun.com:8875/<TOKEN>";
+        const RECIPIENT_ADDRESS: &str = "<RECIPIENT_ADDRESS>";
+        const AMOUNT_LAMPORTS: u64 = 1_000_000;
+
+        #[tokio::main]
+        async fn main() -> anyhow::Result<()> {
+            let payer = read_keypair_file(KEYPAIR_PATH)
+                .map_err(|error| anyhow::anyhow!(error.to_string()))?;
+            let recipient: Pubkey = RECIPIENT_ADDRESS.parse()?;
+
+            let rpc = RpcClient::new_with_timeout(RPC_URL.to_string(), Duration::from_secs(30));
+            let (blockhash, _) = rpc
+                .get_latest_blockhash_with_commitment(CommitmentConfig::confirmed())
+                .await?;
+
+            let instruction =
+                system_instruction::transfer(&payer.pubkey(), &recipient, AMOUNT_LAMPORTS);
+            let transaction = VersionedTransaction::from(Transaction::new_signed_with_payer(
+                &[instruction],
+                Some(&payer.pubkey()),
+                &[&payer],
+                blockhash,
+            ));
+
+            let gun = RpcClient::new_with_timeout(GUN_URL.to_string(), Duration::from_secs(30));
+            let signature = gun
+                .send_transaction_with_config(
+                    &transaction,
+                    RpcSendTransactionConfig { skip_preflight: true, ..Default::default() },
+                )
+                .await?;
+
+            println!("Submitted. Transaction signature: {signature}");
+
+            Ok(())
+        }
+        ```
+      </Step>
+      <Step title="Run">
+        ```bash
+        cargo run --release
+        ```
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Submission response
+
+A successful call returns the transaction signature and means Solana Gun accepted it for forwarding.
+
+<Note>
+It does not guarantee confirmation on Solana.
+</Note>

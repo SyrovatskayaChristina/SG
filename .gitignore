@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Node / Mintlify CLI
+node_modules/
+.mintlify/
+.next/
+npm-debug.log*
+yarn-error.log*
+
+# Env
+.env
+.env.*

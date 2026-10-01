@@ -1,0 +1,89 @@
+---
+title: "Introduction"
+description: "Solana Gun is a fast transaction landing service for Solana."
+---
+
+Solana Gun is a fast transaction landing service for Solana. It shortens the delivery path between your application and Solana's block producers. Send a signed transaction to a nearby Solana Gun endpoint over RPC, WebSocket, or QUIC, and the service uses its view of the leader schedule to forward it over SwQoS connections to the validators responsible for the current and upcoming blocks.
+
+## Who should use it
+
+Solana Gun is useful when arriving late can change the outcome of a transaction. Typical users include:
+
+- Systems acting on short-lived market signals, including market-making, arbitrage, liquidation, and other automated trading strategies.
+- DeFi products and wallets that want a dedicated submission path for important user transactions, particularly when the network is busy.
+- Bots and backend services with frequent transaction traffic that can take advantage of persistent WebSocket sessions or direct QUIC submission.
+- Teams that already have an RPC provider but want to improve transaction delivery without operating their own routing and leader-tracking infrastructure.
+
+## How it works
+
+<Steps>
+  <Step title="Build and sign your transaction">
+    Include a tip of at least 0.001 SOL to one of the Solana Gun [tip addresses](#tip-addresses) listed below.
+  </Step>
+  <Step title="Submit the transaction">
+    Send the signed transaction to a Solana Gun endpoint using your token and preferred protocol.
+  </Step>
+  <Step title="Check the result">
+    Check the transaction signature with your regular Solana RPC endpoint to see whether the transaction landed.
+  </Step>
+</Steps>
+
+## Protocol guides
+
+All three protocols use the same authentication token. Choose the option that fits your application:
+
+<CardGroup cols={3}>
+  <Card title="QUIC" icon="bolt" href="/how-to-set-up/quic">
+    For latency-sensitive transaction submission. **Recommended.**
+  </Card>
+  <Card title="RPC" icon="server" href="/how-to-set-up/rpc">
+    Compatible with standard Solana RPC clients.
+  </Card>
+  <Card title="WebSocket" icon="plug" href="/how-to-set-up/websocket">
+    For browser applications that need a persistent connection.
+  </Card>
+</CardGroup>
+
+## Token
+
+Get your personal token through the inner chat on the [Allnodes website](https://www.allnodes.com).
+
+## Endpoints
+
+Choose a host close to your application:
+
+| Location | RPC | WebSocket | QUIC |
+| --- | --- | --- | --- |
+| Frankfurt, Germany (FRA1) | `https://fra1.solanagun.com:8875` | `wss://fra1.solanagun.com:8875` | `fra1.solanagun.com:7000` |
+| Frankfurt, Germany (FRA2) | `https://fra2.solanagun.com:8875` | `wss://fra2.solanagun.com:8875` | `fra2.solanagun.com:7000` |
+| Ashburn, USA (ASH1) | `https://ash1.solanagun.com:8875` | `wss://ash1.solanagun.com:8875` | `ash1.solanagun.com:7000` |
+| Tokyo, Japan (TYO1) | `https://tyo1.solanagun.com:8875` | `wss://tyo1.solanagun.com:8875` | `tyo1.solanagun.com:7000` |
+
+## Tip addresses
+
+<Note>
+Minimum tip: **0.001 SOL** (1,000,000 lamports).
+</Note>
+
+```text
+gun13PveLGGLdCt5ewxeRvBP4Lhrf6CumQsR5F4GjAQ
+gun14edfoGsxTV9q38ASt5UPyqeBuD85j1FA8mqVPKb
+gun16G4o1HgjkQyhhbMuTgvHAbEZNehHUjNP8Mzf99N
+gun16V1tJe4QcQ2LK1pQvX1ziB5pJK5FTBNHKHFvPjS
+gun18EwFEENgYguUpcSPgMTMThTPZVKzxZJxSibCEUK
+gun19DBL9TX3Se7ZdGLowiELQumjFNUTbAji2rZJ6mD
+gun1cuRx87XZ8u5Usisaeb3cwvG2ymAKfWx6k5PVaab
+gun1DCUj8HTeFwwj6z9WTUqwQRzkAf8S1GZa3jU8SBx
+gun1dz5J9xHSd3R2yrygyA2jE22Ux4HTChsZT62fwK9
+gun1GNF5b4zb8Gw6KpsdUxMCXYyyEp4MvahPKH2vbym
+gun1KPKVLTgxX5vVa77xvESDzN4omWZA47ctjRHbbXT
+gun1Kzf73zj7FMNKgWxicwPpeBGSbY6ztK2CyaYyYNq
+gun1nLSvyWptSi924MTsfK7vBgc3WmLotKzabCdw43N
+gun1RdYCzsFkd3VdyUQYW3hPnYzucWUtBVQb93VsNQb
+gun1ReHkTMFwGrrJyJM345nESQAP8ZYKUeuquTM9vwW
+gun1u5q8SRRHC48Ld9rNovSgJUbpivJfvuChRwv6Y6D
+gun1uxT41SgPxxGDR1AztBpkpqSjt6QpdofK2ijJDRE
+gun1vvr1afqTL1gBDEBuLnhK4nGiJD2D4GeojbumT6p
+gun1Y9TXeB9odXzW2EYC8S4phsVD7CHDa5arKsB3SUw
+gun1YB7ZXsmaqeiRE6JxN35UNzWx8fto7jiWN5hEmTC
+```
