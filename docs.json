@@ -6,7 +6,7 @@
     "default": "dark",
     "strict": true
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.png",
   "icons": {
     "library": "lucide"
   },
