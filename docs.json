@@ -7,6 +7,9 @@
     "strict": true
   },
   "favicon": "/favicon.svg",
+  "icons": {
+    "library": "lucide"
+  },
   "colors": {
     "primary": "#EF6E47",
     "light": "#F08145",
@@ -33,16 +36,15 @@
       {
         "group": "Getting started",
         "pages": [
-          "introduction",
-          {
-            "group": "How to set up",
-            "expanded": true,
-            "pages": [
-              "how-to-set-up/rpc",
-              "how-to-set-up/websocket",
-              "how-to-set-up/quic"
-            ]
-          }
+          "introduction"
+        ]
+      },
+      {
+        "group": "How to set up",
+        "pages": [
+          "how-to-set-up/rpc",
+          "how-to-set-up/websocket",
+          "how-to-set-up/quic"
         ]
       }
     ]

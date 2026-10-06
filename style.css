@@ -192,12 +192,11 @@ button[data-testid="copy-code-button"] svg {
   color: #ffffff;
 }
 
-/* ---------- Callouts: dark #131313 panel with a colored left accent ----------
-   Note / Info / Tip / Check / Warning: orange. Danger: red. */
+/* ---------- Callouts: translucent accent panel ----------
+   Note / Info / Tip / Check / Warning: orange at 15%. Danger: red at 15%. */
 .dark .callout {
-  background-color: var(--pn-surface) !important;
-  border: 1px solid var(--pn-border) !important;
-  border-left: 3px solid var(--pn-accent) !important;
+  background-color: rgba(239, 110, 71, 0.15) !important;
+  border: 1px solid rgba(239, 110, 71, 0.3) !important;
   border-radius: 16px;
   color: var(--pn-text) !important;
 }
@@ -215,16 +214,9 @@ button[data-testid="copy-code-button"] svg {
   color: var(--pn-accent);
 }
 
-.dark .callout[data-callout-type="warning"] {
-  border-left-color: var(--pn-warn) !important;
-}
-
-.dark .callout[data-callout-type="warning"] [data-component-part="callout-icon"] svg {
-  color: var(--pn-warn);
-}
-
 .dark .callout[data-callout-type="danger"] {
-  border-left-color: var(--pn-error) !important;
+  background-color: rgba(232, 65, 66, 0.15) !important;
+  border-color: rgba(232, 65, 66, 0.3) !important;
 }
 
 .dark .callout[data-callout-type="danger"] [data-component-part="callout-icon"] svg {
