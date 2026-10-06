@@ -255,3 +255,29 @@ a[href*="allnodes.com"] svg {
 #chat-assistant-sheet {
   display: none !important;
 }
+
+/* ---------- Navbar / sidebar Allnodes link stays white (text and arrow) ---------- */
+#navbar a[href*="allnodes.com"],
+#navbar a[href*="allnodes.com"] span,
+#sidebar a[href*="allnodes.com"],
+#sidebar a[href*="allnodes.com"] span,
+#mobile-nav a[href*="allnodes.com"],
+#mobile-nav a[href*="allnodes.com"] span {
+  color: #ffffff !important;
+}
+
+#navbar a[href*="allnodes.com"] svg,
+#sidebar a[href*="allnodes.com"] svg,
+#mobile-nav a[href*="allnodes.com"] svg {
+  color: #ffffff !important;
+  stroke: #ffffff;
+}
+
+#navbar a[href*="allnodes.com"]:hover,
+#navbar a[href*="allnodes.com"]:hover span,
+#sidebar a[href*="allnodes.com"]:hover,
+#sidebar a[href*="allnodes.com"]:hover span,
+#mobile-nav a[href*="allnodes.com"]:hover,
+#mobile-nav a[href*="allnodes.com"]:hover span {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
