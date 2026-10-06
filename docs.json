@@ -66,5 +66,6 @@
   },
   "feedback": {
     "thumbsRating": true
-  }
+  },
+  "description": "SolanaGun\nTransactions landing service for Solana by PublicNode"
 }
