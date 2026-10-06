@@ -60,12 +60,12 @@ export const EndpointsTable = ({ protocol } = {}) => {
                           className="pn-copy-button"
                         >
                           {isCopied ? (
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                               <polyline points="20 6 9 17 4 12" />
                             </svg>
                           ) : (
                             <svg width="14" height="14" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                              <path d="M24.001 21.334v-16a2.667 2.667 0 0 0-2.666-2.667h-16a2.667 2.667 0 0 0-2.667 2.667v16A2.667 2.667 0 0 0 5.335 24h16A2.667 2.667 0 0 0 24 21.334Zm-18.666-16h16v16h-16v-16ZM26.668 8v16a2.667 2.667 0 0 1-2.667 2.667h-16a2.667 2.667 0 0 0 2.667 2.667h13.333A5.333 5.333 0 0 0 29.335 24V10.667A2.667 2.667 0 0 0 26.668 8Z" fill="#fff" />
+                              <path d="M24.001 21.334v-16a2.667 2.667 0 0 0-2.666-2.667h-16a2.667 2.667 0 0 0-2.667 2.667v16A2.667 2.667 0 0 0 5.335 24h16A2.667 2.667 0 0 0 24 21.334Zm-18.666-16h16v16h-16v-16ZM26.668 8v16a2.667 2.667 0 0 1-2.667 2.667h-16a2.667 2.667 0 0 0 2.667 2.667h13.333A5.333 5.333 0 0 0 29.335 24V10.667A2.667 2.667 0 0 0 26.668 8Z" fill="currentColor" />
                             </svg>
                           )}
                         </button>

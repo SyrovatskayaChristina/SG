@@ -1,6 +1,6 @@
 /* SolanaGun docs — fonts and colors modeled on publicnode.com
    Fonts: Poppins (headings/body, set in docs.json), Roboto Mono (code)
-   Colors: #000 page, #131313 surfaces, #FFF text, #6D6D6D muted, #32B665 accent */
+   Colors: #000 page, #131313 surfaces, #FFF text, #6D6D6D muted, #EF6E47 accent, #7475F5 Allnodes links */
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap");
 
@@ -14,8 +14,10 @@
   --pn-text-2: rgba(255, 255, 255, 0.75);
   --pn-muted: #6d6d6d;
   --pn-muted-2: #878787;
-  --pn-accent: #32b665;
-  --pn-accent-2: #47c78a;
+  --pn-accent: #ef6e47;
+  --pn-accent-2: #f08145;
+  --pn-purple: #7475f5;
+  --pn-purple-2: #8b8cf6;
   --pn-warn: #ef6e47;
   --pn-error: #e84142;
   --pn-radius: 20px;
@@ -110,7 +112,7 @@ h1, h2, h3, h4 {
 }
 
 /* ---------- Copy buttons (publicnode.com/seed style) ----------
-   Green #32B665 square, white icon, radius = 1/4 of the side, 50% green on hover */
+   White square with black icon (like the Deploy now button), 75% white on hover */
 .pn-copy-button,
 .code-block-copy-button button,
 button[data-testid="copy-code-button"] {
@@ -124,8 +126,8 @@ button[data-testid="copy-code-button"] {
   border: none !important;
   outline: none;
   border-radius: 7px !important;
-  background-color: var(--pn-accent) !important;
-  color: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -133,13 +135,13 @@ button[data-testid="copy-code-button"] {
 .pn-copy-button:hover,
 .code-block-copy-button button:hover,
 button[data-testid="copy-code-button"]:hover {
-  background-color: rgba(50, 182, 101, 0.5) !important;
+  background-color: rgba(255, 255, 255, 0.75) !important;
 }
 
 .pn-copy-button:focus-visible,
 .code-block-copy-button button:focus-visible,
 button[data-testid="copy-code-button"]:focus-visible {
-  background-color: rgba(50, 182, 101, 0.75) !important;
+  background-color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .pn-copy-button svg {
@@ -163,8 +165,8 @@ button[data-testid="copy-code-button"] svg {
 
 .code-block-copy-button button svg,
 button[data-testid="copy-code-button"] svg {
-  color: #ffffff !important;
-  stroke: #ffffff;
+  color: #000000 !important;
+  stroke: #000000;
 }
 
 /* ---------- Navbar logo: "SolanaGun" with "by Allnodes" beneath, like publicnode.com ---------- */
@@ -191,7 +193,7 @@ button[data-testid="copy-code-button"] svg {
 }
 
 /* ---------- Callouts: dark #131313 panel with a colored left accent ----------
-   Note / Info / Tip / Check: green. Warning: publicnode orange. Danger: red. */
+   Note / Info / Tip / Check / Warning: orange. Danger: red. */
 .dark .callout {
   background-color: var(--pn-surface) !important;
   border: 1px solid var(--pn-border) !important;
@@ -227,4 +229,26 @@ button[data-testid="copy-code-button"] svg {
 
 .dark .callout[data-callout-type="danger"] [data-component-part="callout-icon"] svg {
   color: var(--pn-error);
+}
+
+/* ---------- Allnodes links: publicnode purple (#7475F5, 500, no underline) ---------- */
+a[href*="allnodes.com"],
+a[href*="allnodes.com"] span,
+.dark a[href*="allnodes.com"],
+.dark a[href*="allnodes.com"] span {
+  color: var(--pn-purple) !important;
+  font-weight: 500;
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+a[href*="allnodes.com"]:hover,
+a[href*="allnodes.com"]:hover span,
+.dark a[href*="allnodes.com"]:hover,
+.dark a[href*="allnodes.com"]:hover span {
+  color: var(--pn-purple-2) !important;
+}
+
+a[href*="allnodes.com"] svg {
+  color: var(--pn-purple);
 }
