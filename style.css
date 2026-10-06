@@ -244,3 +244,14 @@ a[href*="allnodes.com"]:hover span,
 a[href*="allnodes.com"] svg {
   color: var(--pn-purple);
 }
+
+/* ---------- Hide the AI assistant ("Ask a question" bar, navbar button, code-block button) ----------
+   Primary switch is the Assistant page in the Mintlify dashboard; this is a fallback. */
+[data-assistant-bar],
+[data-assistant-sheet-container],
+#assistant-entry,
+#assistant-entry-mobile,
+#ask-assistant-code-block-button,
+#chat-assistant-sheet {
+  display: none !important;
+}
