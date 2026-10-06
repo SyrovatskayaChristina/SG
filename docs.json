@@ -2,21 +2,30 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "SolanaGun",
   "theme": "maple",
-  "modeToggle": {
+  "appearance": {
     "default": "dark",
-    "isHidden": true
+    "strict": true
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#1E78FF",
-    "light": "#4A9AFF",
-    "dark": "#1E78FF"
+    "primary": "#32B665",
+    "light": "#47C78A",
+    "dark": "#32B665"
   },
   "background": {
-    "decoration": "grid",
     "color": {
-      "dark": "#0D0D0D",
+      "dark": "#000000",
       "light": "#FFFFFF"
+    }
+  },
+  "fonts": {
+    "heading": {
+      "family": "Poppins",
+      "weight": 600
+    },
+    "body": {
+      "family": "Poppins",
+      "weight": 400
     }
   },
   "navigation": {

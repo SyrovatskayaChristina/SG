@@ -1,0 +1,230 @@
+/* SolanaGun docs — fonts and colors modeled on publicnode.com
+   Fonts: Poppins (headings/body, set in docs.json), Roboto Mono (code)
+   Colors: #000 page, #131313 surfaces, #FFF text, #6D6D6D muted, #32B665 accent */
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap");
+
+:root {
+  --pn-bg: #000000;
+  --pn-surface: #131313;
+  --pn-surface-2: rgba(255, 255, 255, 0.05);
+  --pn-surface-3: rgba(255, 255, 255, 0.1);
+  --pn-border: rgba(255, 255, 255, 0.1);
+  --pn-text: #ffffff;
+  --pn-text-2: rgba(255, 255, 255, 0.75);
+  --pn-muted: #6d6d6d;
+  --pn-muted-2: #878787;
+  --pn-accent: #32b665;
+  --pn-accent-2: #47c78a;
+  --pn-warn: #ef6e47;
+  --pn-error: #e84142;
+  --pn-radius: 20px;
+}
+
+/* Monospace everywhere code appears */
+code,
+kbd,
+samp,
+pre,
+pre code,
+.font-mono,
+code-block,
+code-block pre,
+code-block code {
+  font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace !important;
+}
+
+/* Typography accents from publicnode: tight headings, slightly wide labels */
+h1, h2, h3, h4 {
+  letter-spacing: -0.01em;
+}
+
+.dark #sidebar-content,
+.dark #table-of-contents-content {
+  color: var(--pn-text-2);
+}
+
+/* Surfaces: cards, callouts and code blocks use the #131313 panel with large radius */
+.dark .card,
+.dark .callout,
+.dark .accordion,
+.dark .expandable,
+.dark .frame {
+  background-color: var(--pn-surface);
+  border-color: var(--pn-border);
+  border-radius: var(--pn-radius);
+}
+
+.dark .card:hover {
+  border-color: var(--pn-accent);
+}
+
+.dark .code-block,
+.dark .code-block pre {
+  background-color: var(--pn-surface);
+  border-color: var(--pn-border);
+}
+
+.dark .code-block {
+  border-radius: 16px;
+}
+
+/* Inline code: subtle white-on-black chip */
+.dark :not(pre) > code {
+  background-color: var(--pn-surface-2);
+  border: 1px solid var(--pn-border);
+  color: var(--pn-text);
+}
+
+/* Muted secondary text */
+.dark #pagination,
+.dark #footer {
+  color: var(--pn-muted-2);
+}
+
+/* Navbar and search entry */
+.dark #navbar {
+  background-color: rgba(0, 0, 0, 0.85);
+  border-bottom-color: var(--pn-border);
+}
+
+.dark #search-bar-entry {
+  background-color: var(--pn-surface-2);
+  border-color: var(--pn-border);
+  border-radius: 12px;
+}
+
+.dark #search-bar-entry:hover {
+  background-color: var(--pn-surface-3);
+}
+
+/* Steps and tabs */
+.dark .steps {
+  border-color: var(--pn-border);
+}
+
+.dark .tabs [role="tab"][data-state="active"],
+.dark .tabs [aria-selected="true"] {
+  color: var(--pn-text);
+  border-color: var(--pn-accent);
+}
+
+/* ---------- Copy buttons (publicnode.com/seed style) ----------
+   Green #32B665 square, white icon, radius = 1/4 of the side, 50% green on hover */
+.pn-copy-button,
+.code-block-copy-button button,
+button[data-testid="copy-code-button"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin: 0;
+  border: none !important;
+  outline: none;
+  border-radius: 7px !important;
+  background-color: var(--pn-accent) !important;
+  color: #ffffff !important;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.pn-copy-button:hover,
+.code-block-copy-button button:hover,
+button[data-testid="copy-code-button"]:hover {
+  background-color: rgba(50, 182, 101, 0.5) !important;
+}
+
+.pn-copy-button:focus-visible,
+.code-block-copy-button button:focus-visible,
+button[data-testid="copy-code-button"]:focus-visible {
+  background-color: rgba(50, 182, 101, 0.75) !important;
+}
+
+.pn-copy-button svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Mintlify code-block copy button */
+.code-block-copy-button button,
+button[data-testid="copy-code-button"] {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px !important;
+}
+
+.code-block-copy-button button svg,
+button[data-testid="copy-code-button"] svg {
+  width: 13px;
+  height: 13px;
+}
+
+.code-block-copy-button button svg,
+button[data-testid="copy-code-button"] svg {
+  color: #ffffff !important;
+  stroke: #ffffff;
+}
+
+/* ---------- Navbar logo: "SolanaGun" with "by Allnodes" beneath, like publicnode.com ---------- */
+.nav-logo {
+  font-family: "Poppins", sans-serif !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  height: auto !important;
+  line-height: 1 !important;
+  letter-spacing: -0.01em;
+}
+
+.nav-logo::after {
+  content: "by Allnodes";
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #ffffff;
+}
+
+/* ---------- Callouts: dark #131313 panel with a colored left accent ----------
+   Note / Info / Tip / Check: green. Warning: publicnode orange. Danger: red. */
+.dark .callout {
+  background-color: var(--pn-surface) !important;
+  border: 1px solid var(--pn-border) !important;
+  border-left: 3px solid var(--pn-accent) !important;
+  border-radius: 16px;
+  color: var(--pn-text) !important;
+}
+
+.dark .callout [data-component-part="callout-content"] {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.dark .callout [data-component-part="callout-content"] strong,
+.dark .callout [data-component-part="callout-content"] a {
+  color: #ffffff !important;
+}
+
+.dark .callout [data-component-part="callout-icon"] svg {
+  color: var(--pn-accent);
+}
+
+.dark .callout[data-callout-type="warning"] {
+  border-left-color: var(--pn-warn) !important;
+}
+
+.dark .callout[data-callout-type="warning"] [data-component-part="callout-icon"] svg {
+  color: var(--pn-warn);
+}
+
+.dark .callout[data-callout-type="danger"] {
+  border-left-color: var(--pn-error) !important;
+}
+
+.dark .callout[data-callout-type="danger"] [data-component-part="callout-icon"] svg {
+  color: var(--pn-error);
+}

@@ -22,19 +22,19 @@ export const EndpointsTable = ({ protocol } = {}) => {
     });
   };
 
-  const cell = "px-4 py-2 border-b border-zinc-950/10 dark:border-white/10 align-middle";
+  const cell = "px-4 py-2 border-b border-white/10 align-middle";
 
   return (
-    <div className="not-prose my-6 overflow-x-auto rounded-xl border border-zinc-950/10 dark:border-white/10">
+    <div className="not-prose my-6 overflow-x-auto rounded-xl border border-white/10" style={{ backgroundColor: "#131313" }}>
       <table className="w-full text-sm text-left" style={{ borderCollapse: "collapse" }}>
         <thead>
-          <tr className="text-zinc-950/70 dark:text-white/70">
+          <tr className="text-white/70">
             <th className={`${cell} font-semibold`}>Location</th>
             {showProtocol && <th className={`${cell} font-semibold`}>Protocol</th>}
             <th className={`${cell} font-semibold`}>Endpoint</th>
           </tr>
         </thead>
-        <tbody className="text-zinc-950/90 dark:text-white/90">
+        <tbody className="text-white/90">
           {regions.map((region) =>
             protocols.map((proto, i) => {
               const value = proto.url(region.host);
@@ -44,42 +44,42 @@ export const EndpointsTable = ({ protocol } = {}) => {
                   {i === 0 && (
                     <td rowSpan={protocols.length} className={cell} style={{ whiteSpace: "nowrap" }}>
                       <div className="font-medium">{region.name}</div>
-                      <div className="text-xs text-zinc-950/50 dark:text-white/50">{region.code}</div>
+                      <div className="text-xs text-white/50">{region.code}</div>
                     </td>
                   )}
                   {showProtocol && <td className={cell} style={{ whiteSpace: "nowrap" }}>{proto.name}</td>}
                   <td className={cell}>
-                    <span style={{ position: "relative", display: "inline-block" }}>
-                      <button
-                        type="button"
-                        onClick={() => copy(value)}
-                        title="Click to copy"
-                        aria-label={`Copy ${value}`}
-                        className="group inline-flex items-center gap-2 rounded-md border border-zinc-950/10 dark:border-white/10 hover:border-primary dark:hover:border-primary-light bg-zinc-950/5 dark:bg-white/5 px-2 py-1 font-mono text-sm text-zinc-950/90 dark:text-white/90 transition-colors cursor-pointer"
-                        style={{ whiteSpace: "nowrap" }}
-                      >
-                        <span>{value}</span>
-                        {isCopied ? (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                        ) : (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="opacity-50 group-hover:opacity-100 transition-opacity">
-                            <rect x="9" y="9" width="13" height="13" rx="2" />
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                          </svg>
-                        )}
-                      </button>
-                      {isCopied && (
-                        <span
-                          role="status"
-                          className="rounded-md bg-zinc-900 dark:bg-white px-2 py-1 text-xs font-medium text-white dark:text-zinc-900 shadow"
-                          style={{ position: "absolute", bottom: "calc(100% + 6px)", left: "50%", transform: "translateX(-50%)", whiteSpace: "nowrap", pointerEvents: "none" }}
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <span className="font-mono text-sm text-white" style={{ whiteSpace: "nowrap" }}>{value}</span>
+                      <span style={{ position: "relative", display: "inline-flex", flexShrink: 0 }}>
+                        <button
+                          type="button"
+                          onClick={() => copy(value)}
+                          title="Copy"
+                          aria-label={`Copy ${value}`}
+                          className="pn-copy-button"
                         >
-                          Copied!
-                        </span>
-                      )}
-                    </span>
+                          {isCopied ? (
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                          ) : (
+                            <svg width="14" height="14" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                              <path d="M24.001 21.334v-16a2.667 2.667 0 0 0-2.666-2.667h-16a2.667 2.667 0 0 0-2.667 2.667v16A2.667 2.667 0 0 0 5.335 24h16A2.667 2.667 0 0 0 24 21.334Zm-18.666-16h16v16h-16v-16ZM26.668 8v16a2.667 2.667 0 0 1-2.667 2.667h-16a2.667 2.667 0 0 0 2.667 2.667h13.333A5.333 5.333 0 0 0 29.335 24V10.667A2.667 2.667 0 0 0 26.668 8Z" fill="#fff" />
+                            </svg>
+                          )}
+                        </button>
+                        {isCopied && (
+                          <span
+                            role="status"
+                            className="rounded-md bg-white px-2 py-1 text-xs font-medium text-black shadow"
+                            style={{ position: "absolute", bottom: "calc(100% + 6px)", left: "50%", transform: "translateX(-50%)", whiteSpace: "nowrap", pointerEvents: "none" }}
+                          >
+                            Copied!
+                          </span>
+                        )}
+                      </span>
+                    </div>
                   </td>
                 </tr>
               );
