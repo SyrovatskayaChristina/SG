@@ -281,3 +281,25 @@ a[href*="allnodes.com"] svg {
 #mobile-nav a[href*="allnodes.com"]:hover span {
   color: rgba(255, 255, 255, 0.75) !important;
 }
+
+/* ---------- Asterisk footnote: marker after a link, grey note under the paragraph ---------- */
+.pn-footnote-ref {
+  margin-left: 1px;
+  font-size: 0.85em;
+  line-height: 0;
+  color: var(--pn-purple);
+  font-weight: 600;
+}
+
+.pn-footnote {
+  margin-top: -0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--pn-muted-2) !important;
+}
+
+.pn-footnote sup {
+  margin-right: 2px;
+  font-weight: 600;
+  color: var(--pn-purple);
+}
