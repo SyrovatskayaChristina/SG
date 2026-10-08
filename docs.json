@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "SolanaGun",
+  "name": "Solana Gun",
   "theme": "maple",
   "appearance": {
     "default": "dark",
