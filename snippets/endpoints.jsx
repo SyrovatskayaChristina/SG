@@ -4,6 +4,10 @@ export const EndpointsTable = ({ protocol } = {}) => {
   const regions = [
     { name: "Frankfurt, Germany", code: "FRA1", host: "fra1.solanagun.com" },
     { name: "Frankfurt, Germany", code: "FRA2", host: "fra2.solanagun.com" },
+    { name: "Frankfurt, Germany", code: "FRA3", host: "fra3.solanagun.com" },
+    { name: "Amsterdam, Netherlands", code: "AMS1", host: "ams1.solanagun.com" },
+    { name: "London, UK", code: "LON1", host: "lon1.solanagun.com" },
+    { name: "New York, USA", code: "NYC1", host: "nyc1.solanagun.com" },
     { name: "Ashburn, USA", code: "ASH1", host: "ash1.solanagun.com" },
     { name: "Tokyo, Japan", code: "TYO1", host: "tyo1.solanagun.com" },
   ];
