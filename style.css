@@ -84,6 +84,31 @@ h1, h2, h3, h4 {
   color: var(--pn-muted-2);
 }
 
+/* Next/Previous cards: show the full title and description instead of truncating
+   (Mintlify applies `truncate` + a fixed `lg:w-72` width to these by default) */
+[data-component-part="pagination-title"],
+[data-component-part="pagination-description"] {
+  width: auto !important;
+  max-width: none !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+/* QUIC's description has an inline markdown link, which the pagination card
+   renders as raw "[text](url)" (it doesn't parse markdown like the page subtitle
+   does, and this is currently only reached from the WebSocket page's "Next" card).
+   Swap in the plain-text version there; the link itself still works fine as part
+   of the QUIC page's own subtitle. */
+a[href="/how-to-set-up/quic"] [data-component-part="pagination-description"] {
+  font-size: 0;
+}
+
+a[href="/how-to-set-up/quic"] [data-component-part="pagination-description"]::after {
+  content: "Send Solana transactions with the Solana Gun Rust client, which handles connection setup and authentication.";
+  font-size: 0.875rem;
+}
+
 /* Navbar and search entry */
 .dark #navbar {
   background-color: rgba(0, 0, 0, 0.85);
