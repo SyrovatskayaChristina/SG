@@ -12,9 +12,9 @@ export const EndpointsTable = ({ protocol } = {}) => {
     { name: "Tokyo, Japan", code: "TYO1", host: "tyo1.solanagun.com" },
   ];
   const allProtocols = [
+    { name: "QUIC", url: (host) => `${host}:7000` },
     { name: "RPC", url: (host) => `https://${host}:8875` },
     { name: "WebSocket", url: (host) => `wss://${host}:8875` },
-    { name: "QUIC", url: (host) => `${host}:7000` },
   ];
   const protocols = protocol ? allProtocols.filter((p) => p.name === protocol) : allProtocols;
   const showProtocol = protocols.length > 1;

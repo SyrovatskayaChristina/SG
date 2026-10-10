@@ -42,9 +42,9 @@
       {
         "group": "How to set up",
         "pages": [
+          "how-to-set-up/quic",
           "how-to-set-up/rpc",
-          "how-to-set-up/websocket",
-          "how-to-set-up/quic"
+          "how-to-set-up/websocket"
         ]
       }
     ]
