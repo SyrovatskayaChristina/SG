@@ -13,7 +13,7 @@ export const EndpointsTable = ({ protocol } = {}) => {
   ];
   const allProtocols = [
     { name: "QUIC", url: (host) => `${host}:7000` },
-    { name: "RPC", url: (host) => `https://${host}:8878` },
+    { name: "RPC", url: (host) => `https://${host}:8875` },
     { name: "WebSocket", url: (host) => `wss://${host}:8875` },
   ];
   const protocols = protocol ? allProtocols.filter((p) => p.name === protocol) : allProtocols;
